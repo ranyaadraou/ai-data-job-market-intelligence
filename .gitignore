@@ -44,3 +44,7 @@ rapport-web-mining.pdf
 build/
 dist/
 *.egg-info/
+
+# Local repository preparation scripts
+prepare_job_market_github_*.py
+clean_public_repo_*.py
