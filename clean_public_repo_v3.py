@@ -1,4 +1,11 @@
-# AI & Data Job Market Intelligence
+from __future__ import annotations
+
+import shutil
+from pathlib import Path
+
+TITLE = "CLEAN PUBLIC GITHUB REPOSITORY"
+
+README = """# AI & Data Job Market Intelligence
 
 Academic Web Mining project developed at ENSA Tetouan to study the Data & AI job market from large-scale job-offer data.
 
@@ -131,3 +138,123 @@ This project was completed for the **Web Mining (M242)** module at **ENSA Tetoua
 - Ranya Adraou
 - Aya Ettalbi
 - Ouiame Biloul
+"""
+
+GITIGNORE = """# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Local datasets and generated data files
+data/
+*.csv
+*.parquet
+*.feather
+
+# Local models / temporary outputs
+*.pkl
+*.pickle
+*.joblib
+tmp/
+temp/
+
+# Preparation backups
+_backup_before_github_prepare_*/
+
+# Keep only the report stored in docs/
+rapport-web-mining.pdf
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+"""
+
+
+def main() -> None:
+    print()
+    print(TITLE)
+    print("=" * len(TITLE))
+
+    root = Path.cwd()
+
+    required = [
+        root / "01_collecte_et_sources.ipynb",
+        root / "05_mongodb_storage.ipynb",
+        root / "07_web_structure_mining_graph_skills.ipynb",
+    ]
+    if not all(p.exists() for p in required):
+        raise SystemExit(
+            "\nERROR: Run this script from the root of the Web Mining project.\n"
+            "No file was changed."
+        )
+
+    # Remove preparation backups. These should never be part of the public repo.
+    removed_backups = []
+    for folder in root.glob("_backup_before_github_prepare_*"):
+        if folder.is_dir():
+            shutil.rmtree(folder)
+            removed_backups.append(folder.name)
+
+    # Remove placeholder README files that were only useful during preparation.
+    for rel in ("dashboard/README.md", "data/README.md"):
+        path = root / rel
+        if path.exists():
+            path.unlink()
+
+    # Remove empty placeholder directories.
+    for name in ("dashboard", "data"):
+        folder = root / name
+        if folder.exists() and folder.is_dir():
+            try:
+                folder.rmdir()
+            except OSError:
+                # Keep the folder if the user has already added real files.
+                pass
+
+    # Rewrite the public README in a simpler, natural project voice.
+    (root / "README.md").write_text(README, encoding="utf-8", newline="\n")
+    (root / ".gitignore").write_text(GITIGNORE, encoding="utf-8", newline="\n")
+
+    print("README.md rewritten")
+    print(".gitignore updated")
+    print("dashboard/README.md removed")
+    print("data/README.md removed")
+
+    if removed_backups:
+        print("Removed backup folders:")
+        for name in removed_backups:
+            print(" -", name)
+    else:
+        print("No local preparation backup folder found.")
+
+    print()
+    print("DONE.")
+    print()
+    print("Next commands:")
+    print("  git add -A")
+    print("  git status")
+    print('  git commit -m "Clean repository structure and update README"')
+    print("  git push")
+
+
+if __name__ == "__main__":
+    main()
