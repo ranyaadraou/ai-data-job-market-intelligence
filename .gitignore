@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
+
+# Large datasets and generated analytical files
+data/*
+!data/README.md
+*.csv
+*.parquet
+*.feather
+
+# Generated models / forecasts
+*.pkl
+*.pickle
+*.joblib
+
+# Local MongoDB / temporary files
+mongodb-data/
+tmp/
+temp/
+
+# Python packaging
+build/
+dist/
+*.egg-info/

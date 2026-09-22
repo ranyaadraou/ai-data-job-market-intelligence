@@ -1,0 +1,16 @@
+pandas
+numpy
+matplotlib
+seaborn
+pymongo
+tqdm
+scikit-learn
+transformers
+sentence-transformers
+torch
+networkx
+python-louvain
+prophet
+pytrends
+statsmodels
+jupyterlab
